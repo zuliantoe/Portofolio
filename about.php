@@ -1,9 +1,4 @@
 <?php 
-session_start();
-if (!isset($_SESSION["username"])) {
-    header("Location: login.php");
-    exit();
-}
 $title = "Company Profile Dasar | ABOUT";   
 $page = "about";
     include 'partial/meta.php'; 

@@ -4,7 +4,14 @@
     box-sizing: border-box;
 }
 
+html {
+    height: 100%;
+}
+
 body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     font-family: Arial, sans-serif;
     line-height: 1.6;
     color: #222;
@@ -24,7 +31,7 @@ ul {
 .container {
     width: 90%;
     max-width: 1100px;
-    margin: 0 auto;
+    margin: 0 auto ;
 }
 
 /* Row & Column */
@@ -182,6 +189,41 @@ ul {
     font-size: 14px;
 }
 
+/* Table */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.portfolio-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.portfolio-table th,
+.portfolio-table td {
+    padding: 14px;
+    border: 1px solid #cbd5e1;
+    text-align: left;
+    vertical-align: top;
+}
+
+.portfolio-table th {
+    background: #0f172a;
+    color: white;
+}
+
+.portfolio-table tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+.table-image {
+    max-width: 120px;
+    height: auto;
+    border-radius: 8px;
+}
+
 /* Login */
 .login-container {
     display: flex;
@@ -237,11 +279,8 @@ ul {
     background: #0f172a;
     color: white;
     padding: 20px 0;
-    margin-top: 20px;
-    /* make footer always at the bottom */
-    position: fixed;
+    margin-top: 25px;
     width: 100%;
-    bottom: 0px;
 
 }
 

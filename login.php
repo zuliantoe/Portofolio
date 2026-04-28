@@ -14,7 +14,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($username == $usernameBenar && $password == $passwordBenar) {
         $berhasilLogin = true;
         $_SESSION["username"] = $username; // Simpan username di session
-        $pesan = "Login berhasil. Selamat datang, " . htmlspecialchars($username) . "!";
+        // Redirect ke halaman admin setelah login berhasil
+        header("Location: admin.php");
+        exit();
     } else {
         $pesan = "Username atau password salah.";
     }
