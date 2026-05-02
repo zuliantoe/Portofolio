@@ -48,6 +48,20 @@ if ($items->num_rows > 0) {//kalau ada data portfolio di database maka kita fetc
     }
 }
 
+//simpan portfolio baru ke database ketika form tambah portfolio disubmit
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title']) && isset($_POST['description'])) {
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $image = $_POST['image'] ?? '';
+    //gunakan prepared statement untuk mencegah SQL injection
+    $stmt = $pdo->prepare("INSERT INTO portfolio_items (title, description, image_url) VALUES (?, ?, ?)");
+    $stmt->execute([$title, $description, $image]);
+    //redirect ke halaman admin setelah berhasil menambahkan portfolio baru untuk mencegah form resubmission ketika halaman di-refresh
+    header("Location: admin.php");
+    exit();
+}
+
+
 
 $title = "Company Profile Dasar | Admin Page";   
 $page = "about";
@@ -116,7 +130,7 @@ include 'partial/header.php';
                                     <td><?php echo htmlspecialchars($item['title']); ?></td>
                                     <td><?php echo htmlspecialchars($item['description']); ?></td>
                                     <td>
-                                        <?php if ($item['image']): ?>
+                                        <?php if (isset($item['image']) && !empty($item['image'])): ?>
                                             <img class="table-image" src="<?php echo htmlspecialchars($item['image']); ?>" alt="Portfolio Image">
                                         <?php else: ?>
                                             -
