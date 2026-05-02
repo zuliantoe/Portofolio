@@ -1,11 +1,13 @@
 <?php
 session_start();
+//include file koneksi database, kalau tanpa include ini maka script mysql tidak bisa dijalankan karena koneksi ke database tidak ada
+include 'helper/con.php';
 if (!isset($_SESSION['username'])) {
     // User is not logged in, redirect to login page or show error
     header('Location: login.php'); 
     exit;
 }
-
+/* disable portofolio dari session
 //ini create portfolio array in session if not exists
 if (!isset($_SESSION['portfolio'])) {
     $_SESSION['portfolio'] = [];
@@ -17,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'] ?? '';
     $description = $_POST['description'] ?? '';
     $image = $_POST['image'] ?? '';
-    
+    //validasi sederhana untuk memastikan title dan description tidak kosong sebelum disimpan
     if ($title && $description) {
         $_SESSION['portfolio'][] = [
             'title' => $title,
@@ -35,6 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_index'])) {
         array_splice($_SESSION['portfolio'], $deleteIndex, 1);
     }
 }
+    * disable portofolio dari session */
+//cek apakah ada data portfolio di database, kalau tidak ada maka tampilkan pesan bahwa belum ada data portfolio, kalau ada maka tampilkan data portfolio di tabel
+$portofolioItems = [];
+//kita coba pakai mysqli dulu untuk query data portfolio
+$items = $conn->query("SELECT * FROM portfolio_items ORDER BY created_at DESC");
+if ($items->num_rows > 0) {//kalau ada data portfolio di database maka kita fetch data portfolio dan simpan di array $portofolioItems untuk ditampilkan di tabel
+    while ($row = $items->fetch_assoc()) {//fetch data portfolio dan simpan di array $portofolioItems untuk ditampilkan di tabel
+        $portofolioItems[] = $row;
+    }
+}
+
 
 $title = "Company Profile Dasar | Admin Page";   
 $page = "about";
@@ -92,7 +105,12 @@ include 'partial/header.php';
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($_SESSION['portfolio'] as $index => $item): ?>
+                            <?php if (empty($portofolioItems)){ ?>
+                                <tr>
+                                    <td colspan="5" style="text-align: center;">Belum ada data portfolio.</td>
+                                </tr>
+                            <?php } else { ?>
+                            <?php foreach ($portofolioItems as $index => $item): ?>
                                 <tr>
                                     <td><?php echo $index + 1; ?></td>
                                     <td><?php echo htmlspecialchars($item['title']); ?></td>
@@ -112,6 +130,7 @@ include 'partial/header.php';
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>

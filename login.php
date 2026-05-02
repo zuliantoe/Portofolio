@@ -1,17 +1,30 @@
 <?php
 session_start(); // Mulai session untuk menyimpan data login
+include 'helper/con.php'; // Include file koneksi database, kalau tanpa include ini maka script mysql tidak bisa dijalankan karena koneksi ke database tidak ada
 $title = "Company Profile Dasar | LOGIN";
 $page = "login";
+/*
 $usernameBenar = "admin";
 $passwordBenar = "12345";
+*/
+//debug untuk create password hash
+//$passwordHash = password_hash("12345", PASSWORD_DEFAULT);
+//echo "Password hash untuk '12345': " . $passwordHash . "<br>";
 $pesan = "";
 $berhasilLogin = false;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
-
-    if ($username == $usernameBenar && $password == $passwordBenar) {
+    // Cek username dan password di database menggunakan PDO
+    // Gunakan prepared statement untuk mencegah SQL injection
+    // pakai mysql_verify untuk memverifikasi password yang sudah di-hash di database
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username");
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Verifikasi password menggunakan password_verify
+    if ($user && password_verify($password, $user['password'])) {
         $berhasilLogin = true;
         $_SESSION["username"] = $username; // Simpan username di session
         // Redirect ke halaman admin setelah login berhasil
