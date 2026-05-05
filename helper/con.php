@@ -7,13 +7,7 @@ $servername = "127.0.0.1";
 $username = "root";
 $password = "";
 $dbname = "company_profile";
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname, 3306);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}     
-
+   
 // Koneksi ke database MySQL dengan PDO
 try {
     $pdo = new PDO("mysql:host=$servername;port=3306;dbname=$dbname;charset=utf8mb4", $username, $password);

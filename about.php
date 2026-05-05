@@ -1,4 +1,5 @@
 <?php 
+session_start();
 $title = "Company Profile Dasar | ABOUT";   
 $page = "about";
     include 'partial/meta.php'; 

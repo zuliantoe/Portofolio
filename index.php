@@ -1,4 +1,5 @@
 <?php
+session_start();
 $title = "Company Profile Dasar | HOME";   //ini variabel untuk menyimpan judul halaman
 $page = "home"; //ini variabel untuk menyimpan nama halaman, bisa digunakan untuk navigasi aktif
     include 'partial/meta.php'; //ini untuk menyisipkan file meta.php yang berisi tag meta dan link CSS
